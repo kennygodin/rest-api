@@ -9,6 +9,8 @@ import compression from 'compression';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
+import router from './router';
+
 const app = express();
 
 app.use(
@@ -27,8 +29,8 @@ server.listen(8080, () => {
   console.log('Server running on http://localhost:8080/');
 });
 
-console.log(process.env.MONGO_URL);
+mongoose.Promise = Promise;
+mongoose.connect(process.env.MONGO_URL);
+mongoose.connection.on('error', (error: Error) => console.log(error));
 
-// mongoose.Promise = Promise;
-// mongoose.connect(process.env.MONGO_URL);
-// mongoose.connection.on('error', (error: Error) => console.log(error));
+app.use('/', router());
